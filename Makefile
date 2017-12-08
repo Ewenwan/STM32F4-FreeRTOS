@@ -1,6 +1,6 @@
 TARGET:=FreeRTOS
 # TODO change to your ARM gcc toolchain path
-TOOLCHAIN_ROOT:=~/gcc-arm-none-eabi
+TOOLCHAIN_ROOT:=/usr
 TOOLCHAIN_PATH:=$(TOOLCHAIN_ROOT)/bin
 TOOLCHAIN_PREFIX:=arm-none-eabi
 
@@ -20,6 +20,8 @@ INCLUDE+=-I$(CURDIR)/Libraries/CMSIS/Include
 INCLUDE+=-I$(CURDIR)/Libraries/STM32F4xx_StdPeriph_Driver/inc
 INCLUDE+=-I$(CURDIR)/config
 
+INCLUDE+=-I$(FREERTOS)/demo/include
+
 BUILD_DIR = $(CURDIR)/build
 BIN_DIR = $(CURDIR)/binary
 
@@ -27,7 +29,8 @@ BIN_DIR = $(CURDIR)/binary
 # of the same directory as their source files
 vpath %.c $(CURDIR)/Libraries/STM32F4xx_StdPeriph_Driver/src \
           $(CURDIR)/Libraries/syscall $(CURDIR)/hardware $(FREERTOS) \
-          $(FREERTOS)/portable/MemMang $(FREERTOS)/portable/GCC/ARM_CM4F 
+          $(FREERTOS)/portable/MemMang $(FREERTOS)/portable/GCC/ARM_CM4F \
+          $(FREERTOS)/demo/Minimal
 
 vpath %.s $(STARTUP)
 ASRC=startup_stm32f4xx.s
@@ -90,6 +93,12 @@ SRC+=stm32f4xx_rcc.c
 SRC+=stm32f4xx_dbgmcu.c
 SRC+=stm32f4xx_gpio.c
 SRC+=stm32f4xx_rng.c
+
+# Demo source
+#SRC+=flash.c
+SRC+=ParTest.c
+SRC+=iar_stm32f407zg_sk.c
+
 
 CDEFS=-DUSE_STDPERIPH_DRIVER
 CDEFS+=-DSTM32F4XX
